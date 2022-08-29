@@ -59,7 +59,7 @@ exports.deleteJob = async (req, res, next) => {
 exports.allMyJobs = async (req, res, next) => {
 
     try {
-        const job = await Job.findById(req.user._id);
+        const job = await Job.find({ user: req.user._id });
         res.status(200).json({
             success: true,
             job

@@ -59,7 +59,7 @@ exports.deleteJobType = async (req, res, next) => {
 exports.myJobsType = async (req, res, next) => {
 
     try {
-        const jobT = await JobType.find(req.user._id);
+        const jobT = await JobType.find({ user: req.user._id });
         res.status(200).json({
             success: true,
             jobT
