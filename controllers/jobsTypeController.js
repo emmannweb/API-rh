@@ -26,14 +26,14 @@ exports.createJobType = async (req, res, next) => {
 exports.updateJobType = async (req, res, next) => {
 
     try {
-        const jobT = await JobType.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const jobT = await JobType.findByIdAndUpdate(req.params.type_id, req.body, { new: true });
         res.status(200).json({
             success: true,
             jobT
         })
         next();
     } catch (error) {
-        return next(new ErrorResponse('Server error', 500));
+        return next(error);
     }
 }
 
@@ -43,10 +43,10 @@ exports.updateJobType = async (req, res, next) => {
 exports.deleteJobType = async (req, res, next) => {
 
     try {
-        const jobT = await JobType.findByIdAndRemove(req.params.id, req.body);
+        const jobT = await JobType.findByIdAndRemove(req.params.type_id, req.body);
         res.status(200).json({
             success: true,
-            jobT
+            message: "Tipo de vaga foi deletado"
         })
         next();
     } catch (error) {
@@ -55,17 +55,17 @@ exports.deleteJobType = async (req, res, next) => {
 }
 
 
-//all my jobs type
+//all my registred jobs type
 exports.myJobsType = async (req, res, next) => {
 
     try {
-        const jobT = await JobType.find({ user: req.user._id });
+        const jobT = await JobType.find({ user: req.user._id }).populate('user', 'firstName lastName');
         res.status(200).json({
             success: true,
             jobT
         })
         next();
     } catch (error) {
-        return next(new ErrorResponse('Server error', 500));
+        return next(error);
     }
 }

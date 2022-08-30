@@ -28,14 +28,15 @@ exports.createJob = async (req, res, next) => {
 exports.updateJob = async (req, res, next) => {
 
     try {
-        const job = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const job = await Job.findByIdAndUpdate(req.params.news_id, req.body, { new: true }).populate('jobType', 'jobTypeName');
         res.status(200).json({
             success: true,
             job
         })
         next();
     } catch (error) {
-        return next(new ErrorResponse('Server error', 500));
+        return next(error);
+        console.log(error);
     }
 }
 
@@ -43,26 +44,26 @@ exports.updateJob = async (req, res, next) => {
 exports.deleteJob = async (req, res, next) => {
 
     try {
-        const job = await Job.findByIdAndRemove(req.params.id, req.body);
+        const job = await Job.findByIdAndRemove(req.params.news_id, req.body);
         res.status(200).json({
             success: true,
-            job
+            message: "vaga deletado"
         })
         next();
     } catch (error) {
-        return next(new ErrorResponse('Server error', 500));
+        return next(error);
     }
 }
 
 
-//all my jobs
+//all my registred jobs
 exports.allMyJobs = async (req, res, next) => {
 
     try {
-        const job = await Job.find({ user: req.user._id });
+        const jobs = await Job.find({ user: req.user._id }).populate('jobType', 'jobTypeName').populate('user', 'firstName lastName');
         res.status(200).json({
             success: true,
-            job
+            jobs
         })
         next();
     } catch (error) {
@@ -70,15 +71,15 @@ exports.allMyJobs = async (req, res, next) => {
     }
 }
 
-//all my jobs
+//all jobs by type
 exports.jobByType = async (req, res, next) => {
     const { type_id } = req.params;
 
     try {
-        const job = await Job.find({ jobType: type_id }).populate('jobType');
+        const jobs = await Job.find({ jobType: type_id }).populate('jobType', 'jobTypeName').populate('user', 'firstName lastName');
         res.status(200).json({
             success: true,
-            job
+            jobs
         })
         next();
     } catch (error) {
