@@ -1,7 +1,7 @@
 # API-rh
 
 ### The project uses port 8000.
-#### Intructions:
+### Intructions:
 You should have Nodejs and npm installed.
 Clone the project with "git clone" and inside the root folder run "npm install", to install all Node dependencies. You can use Postman to test the endpoints.
 # Endpoint Jobs
